@@ -30,7 +30,7 @@ const Chat = ({ user, setUser }) => {
   const handleLogin = () => {
     signInWithPopup(auth, provider);
 
-    console.log("login");
+  
   };
  
 
