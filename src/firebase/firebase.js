@@ -4,13 +4,14 @@ import {getFirestore} from 'firebase/firestore'
 import {getAuth, GoogleAuthProvider} from 'firebase/auth'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDbmXPa1aAOCBckFliViLcsq7O9AH6ZXXA",
-  authDomain: "chat-app-fb-1c55e.firebaseapp.com",
-  projectId: "chat-app-fb-1c55e",
-  storageBucket: "chat-app-fb-1c55e.appspot.com",
-  messagingSenderId: "636123403450",
-  appId: "1:636123403450:web:00f014733b6a723f4f1e83"
+  apiKey: "AIzaSyByf2m-FBHclU5MBXr1050TtQu7aAVJsDQ",
+  authDomain: "chat-app-cae63.firebaseapp.com",
+  projectId: "chat-app-cae63",
+  storageBucket: "chat-app-cae63.appspot.com",
+  messagingSenderId: "427301527389",
+  appId: "1:427301527389:web:314a94925bdfa7d2f992b4"
 };
+
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app)

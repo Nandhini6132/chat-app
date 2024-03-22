@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import ChatMessage from "./ChatMessage";
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { auth, db, provider } from "../firebase/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -13,7 +21,7 @@ const Chat = ({ user, setUser }) => {
   const [inputImg, setInputImg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState(null);
-  const [deleteForMe, setDeleteForMe]= useState([])
+  const [deleteForMe, setDeleteForMe] = useState([]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -29,10 +37,7 @@ const Chat = ({ user, setUser }) => {
 
   const handleLogin = () => {
     signInWithPopup(auth, provider);
-
-  
   };
- 
 
   const handleImageUpload = async (imageFile) => {
     const storage = getStorage();
@@ -43,7 +48,6 @@ const Chat = ({ user, setUser }) => {
   };
 
   const handleSubmit = async () => {
- 
     const date = new Date();
     const messageData = {
       text,
@@ -52,51 +56,45 @@ const Chat = ({ user, setUser }) => {
       date,
       name: user.displayName,
     };
- 
-    setDeleteForMe(prev=>[...prev,messageData])
+
+    setDeleteForMe((prev) => [...prev, messageData]);
     if (image) {
       const imageURL = await handleImageUpload(image);
       messageData.image = imageURL;
     }
     if (isEditing) {
-      
-      await updateDoc(doc(db, 'message', editingMessageId), {
-        text
+      await updateDoc(doc(db, "message", editingMessageId), {
+        text,
       });
-      setIsEditing(false); 
-      setEditingMessageId(null); 
-   } else {
-      
+      setIsEditing(false);
+      setEditingMessageId(null);
+    } else {
       await addDoc(collection(db, "message"), messageData);
-   }
-  
- 
-   setText("");
-   setInputImg('');
+    }
 
+    setText("");
+    setInputImg("");
+    setImage('')
   };
-
-
 
   //get data from fb
   async function getData() {
     const q = query(collection(db, "message"));
-  const snapshot = await getDocs(q);
-  let updatedMessages = [];
-  snapshot.forEach((doc) => {
-    const data = { ...doc.data(), id: doc.id };
-    if (!deleteForMe.includes(data.id)) {
-      updatedMessages.push(data);
-    }
-  });
-  updatedMessages.sort((a, b) => a.date - b.date);
-  setMessages(updatedMessages);
+    const snapshot = await getDocs(q);
+    let updatedMessages = [];
+    snapshot.forEach((doc) => {
+      const data = { ...doc.data(), id: doc.id };
+      if (!deleteForMe.includes(data.id)) {
+        updatedMessages.push(data);
+      }
+    });
+    updatedMessages.sort((a, b) => a.date - b.date);
+    setMessages(updatedMessages);
   }
 
   useEffect(() => {
     getData();
- 
-  }, [text,image,handleSubmit]);
+  }, [text, image, handleSubmit]);
 
   const logout = () => {
     auth.signOut();
@@ -113,11 +111,10 @@ const Chat = ({ user, setUser }) => {
     setInputImg(URL.createObjectURL(file));
   };
 
-
-  const handleCancelImage=()=>{
-    setInputImg('')
-    setImage('')
-  }
+  const handleCancelImage = () => {
+    setInputImg("");
+    setImage("");
+  };
 
   return (
     <>
@@ -163,47 +160,39 @@ const Chat = ({ user, setUser }) => {
             {/* <div className="col-xl-3 col-lg-4 col-sm-3 col-2"></div> */}
             <div className="p-0">
               <div className=" col-12 p-0 p-lg-3 chat-message">
-              {messages?.map?.((message) =>
-  !message.deleted ? (
-    <ChatMessage
-      key={message.id}
-      {...message}
-      user={user}
-      setText={setText}
-      setMessages={setMessages}
-      isEditing={isEditing}
-      setIsEditing={setIsEditing}
-      editingMessageId={editingMessageId}
-      setEditingMessageId={setEditingMessageId}
-      deleteForMe={deleteForMe}
-      setDeleteForMe={setDeleteForMe}
-    />
-  ) : <ChatMessage   key={message.id}
-  {...message}
-  user={user}
-  setText={setText}
-  setMessages={setMessages}
-  isEditing={isEditing}
-  setIsEditing={setIsEditing}
-  editingMessageId={editingMessageId}
-  setEditingMessageId={setEditingMessageId}
-  deleteForMe={deleteForMe}
-  setDeleteForMe={setDeleteForMe}/>
-)}
-
+                {messages?.map?.((message) =>
+                  !message.deleted ? (
+                    <ChatMessage
+                      key={message.id}
+                      {...message}
+                      user={user}
+                      setText={setText}
+                      setMessages={setMessages}
+                      isEditing={isEditing}
+                      setIsEditing={setIsEditing}
+                      editingMessageId={editingMessageId}
+                      setEditingMessageId={setEditingMessageId}
+                      deleteForMe={deleteForMe}
+                      setDeleteForMe={setDeleteForMe}
+                    />
+                  ) : null
+                )}
               </div>
 
               <div className="mt-4  input">
                 <div className="input-wrapper">
                   {inputImg && (
-                   <div className="d-flex gap-2"  style={{cursor:'pointer'}}>
-                    <img
-                      src={inputImg}
-                      alt="Selected"
-                      style={{ width: "300px", height: "100px" }}
-                    />
-                    <i class="fa-solid fa-xmark" onClick={handleCancelImage}></i>
-                   </div>
+                    <div className="d-flex gap-2" style={{ cursor: "pointer" }}>
+                      <img
+                        src={inputImg}
+                        alt="Selected"
+                        style={{ width: "300px", height: "100px" }}
+                      />
+                      <i
+                        class="fa-solid fa-xmark"
+                        onClick={handleCancelImage}
+                      ></i>
+                    </div>
                   )}
                   <div className="d-flex w-100">
                     <input
