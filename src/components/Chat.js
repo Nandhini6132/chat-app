@@ -12,6 +12,7 @@ import {
 import { auth, db, provider } from "../firebase/firebase";
 import { signInWithPopup } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import scrollToBottom from 'react-scroll-to-bottom'
 
 const Chat = ({ user, setUser }) => {
   const [messages, setMessages] = useState([]);
@@ -21,10 +22,11 @@ const Chat = ({ user, setUser }) => {
   const [inputImg, setInputImg] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [editingMessageId, setEditingMessageId] = useState(null);
+
   const [deleteForMe, setDeleteForMe] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const a = auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
       } else {
@@ -32,7 +34,7 @@ const Chat = ({ user, setUser }) => {
       }
     });
 
-    return () => unsubscribe();
+    return () => a();
   }, []);
 
   const handleLogin = () => {
@@ -94,7 +96,7 @@ const Chat = ({ user, setUser }) => {
 
   useEffect(() => {
     getData();
-  }, [text, image, handleSubmit]);
+  }, [text,image]);
 
   const logout = () => {
     auth.signOut();
@@ -159,6 +161,8 @@ const Chat = ({ user, setUser }) => {
           <div className="row" style={{ height: "95%", padding: "" }}>
             {/* <div className="col-xl-3 col-lg-4 col-sm-3 col-2"></div> */}
             <div className="p-0">
+
+            <scrollToBottom>
               <div className=" col-12 p-0 p-lg-3 chat-message">
                 {messages?.map?.((message) =>
                   !message.deleted ? (
@@ -178,7 +182,7 @@ const Chat = ({ user, setUser }) => {
                   ) : null
                 )}
               </div>
-
+              </scrollToBottom>
               <div className="mt-4  input">
                 <div className="input-wrapper">
                   {inputImg && (
@@ -200,6 +204,7 @@ const Chat = ({ user, setUser }) => {
                       className="form-control form"
                       placeholder="Enter MEssage"
                       value={text}
+                      onKeyPress={(e)=>e.key === 'Enter'&& handleSubmit()}
                       onChange={(e) => setText(e.target.value)}
                     />
 

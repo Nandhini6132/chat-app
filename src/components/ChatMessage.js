@@ -1,6 +1,7 @@
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { auth, db } from "../firebase/firebase";
+import scrollToBottom from 'react-scroll-to-bottom'
 
 const ChatMessage = ({
   text,
@@ -51,6 +52,7 @@ const ChatMessage = ({
   };
 
   return (
+  
     <div
       className={`d-flex justify-content-${
         user.email === email ? "end" : "start"
@@ -183,11 +185,7 @@ const ChatMessage = ({
                       class="fa-solid fa-trash trash"
                       onClick={handleDeleteForEveryOne}
                     ></i>
-                    <i
-                      title="Edit Message"
-                      onClick={handleEditForEveryone}
-                      class="fa-solid fa-pen-to-square edit"
-                    ></i>
+                    
                   </div>
                 </div>
               </>
@@ -196,6 +194,7 @@ const ChatMessage = ({
         </>
       )}
     </div>
+   
   );
 };
 
