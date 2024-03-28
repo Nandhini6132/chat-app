@@ -26,7 +26,7 @@ const Chat = ({ user, setUser }) => {
   const [deleteForMe, setDeleteForMe] = useState([]);
 
   useEffect(() => {
-    const a = auth.onAuthStateChanged((user) => {
+     auth.onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
       } else {
@@ -34,7 +34,7 @@ const Chat = ({ user, setUser }) => {
       }
     });
 
-    return () => a();
+
   }, []);
 
   const handleLogin = () => {
@@ -79,6 +79,8 @@ const Chat = ({ user, setUser }) => {
     setImage('')
   };
 
+  
+
   //get data from fb
   async function getData() {
     const q = query(collection(db, "message"));
@@ -96,7 +98,7 @@ const Chat = ({ user, setUser }) => {
 
   useEffect(() => {
     getData();
-  }, [text,image]);
+  }, [handleSubmit]);
 
   const logout = () => {
     auth.signOut();
